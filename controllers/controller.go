@@ -53,6 +53,13 @@ func CriaNovoAluno(c *gin.Context) {
 		return
 	}
 
+	if err := models.ValidaDadosDeAlunos(&aluno); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
 	database.DB.Create(&aluno)
 	c.JSON(http.StatusOK, aluno)
 }
@@ -65,6 +72,15 @@ func CriaNovosAlunosEmLote(c *gin.Context) {
 			"erro": err.Error(),
 		})
 		return
+	}
+
+	for _, aluno := range alunos {
+		if err := models.ValidaDadosDeAlunos(&aluno); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"erro": err.Error(),
+			})
+			return
+		}
 	}
 
 	if result := database.DB.CreateInBatches(&alunos, 10); result.Error != nil {
@@ -90,6 +106,13 @@ func EditaAluno(c *gin.Context) {
 
 	var alunoEdicao models.Aluno
 	if err := c.ShouldBindJSON(&alunoEdicao); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	if err := models.ValidaDadosDeAlunos(&alunoEdicao); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})

@@ -9,5 +9,4 @@ func main() {
 	database.ConectarBancoDeDados()
 
 	routes.HandleRequests()
-
 }
