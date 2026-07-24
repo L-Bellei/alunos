@@ -19,7 +19,7 @@ func ExibeAlunoPorId(c *gin.Context) {
 	id := c.Params.ByName("id")
 	var aluno models.Aluno
 
-	if err := database.DB.First(&aluno, id); err != nil {
+	if err := database.DB.First(&aluno, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			"error": "aluno não encontrado",
 		})
