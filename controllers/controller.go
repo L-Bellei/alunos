@@ -8,6 +8,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func ExibePaginaIndex(c *gin.Context) {
+	var alunos []models.Aluno
+
+	database.DB.Find(&alunos)
+
+	c.HTML(http.StatusOK, "index.html", gin.H{
+		"alunos": alunos,
+	})
+}
+
+func RotaNaoEncontrada(c *gin.Context) {
+	c.HTML(http.StatusNotFound, "404.html", nil)
+}
+
 func ExibeTodosAlunos(c *gin.Context) {
 	var alunos []models.Aluno
 
